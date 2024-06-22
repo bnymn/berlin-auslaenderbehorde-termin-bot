@@ -1,0 +1,75 @@
+version: "3"
+services:
+  selenium-hub:
+    image: selenium/hub:latest
+    container_name: selenium-hub
+    ports:
+      - "4444:4444"
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+
+  chrome_customer1:
+    image: selenium/node-chrome:125.0
+    volumes:
+      - /dev/shm:/dev/shm
+    environment:
+      HUB_HOST: selenium-hub
+      HUB_PORT: 4444
+      SE_NODE_MAX_SESSIONS: 1
+      SE_NODE_OVERRIDE_MAX_SESSIONS: true
+      VNC_NO_PASSWORD: 0
+      VNC_PASSWORD: ${CUSTOMER1_VNC_PASSWORD}
+      SE_EVENT_BUS_HOST: selenium-hub
+      SE_EVENT_BUS_PUBLISH_PORT: 4442
+      SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
+      VNC_URL: http://localhost:7901/vnc.html
+      SE_NODE_STEREOTYPE: '{"browserName": "chrome", "browserVersion": "125.0", "platformName": "Linux", "goog:chromeOptions": {"binary": "/usr/bin/google-chrome"}, "nodename:applicationName": "chrome_customer1"}'
+    ports:
+      - "5901:5900"
+      - "7901:7900"
+    depends_on:
+      - selenium-hub
+
+  chrome_customer2:
+    image: selenium/node-chrome:latest
+    volumes:
+      - /dev/shm:/dev/shm
+    environment:
+      HUB_HOST: selenium-hub
+      HUB_PORT: 4444
+      SE_NODE_MAX_SESSIONS: 1
+      SE_NODE_OVERRIDE_MAX_SESSIONS: true
+      VNC_NO_PASSWORD: 0
+      VNC_PASSWORD: ${CUSTOMER2_VNC_PASSWORD}
+      SE_EVENT_BUS_HOST: selenium-hub
+      SE_EVENT_BUS_PUBLISH_PORT: 4442
+      SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
+      SE_NODE_STEREOTYPE: '{"browserName": "chrome", "browserVersion": "125.0", "platformName": "Linux", "goog:chromeOptions": {"binary": "/usr/bin/google-chrome"}, "nodename:applicationName": "chrome_customer2"}'
+    ports:
+      - "5902:5900"
+      - "7902:7900"
+    depends_on:
+      - selenium-hub
+
+  chrome_customer3:
+    image: selenium/node-chrome:latest
+    volumes:
+      - /dev/shm:/dev/shm
+    environment:
+      HUB_HOST: selenium-hub
+      HUB_PORT: 4444
+      SE_NODE_MAX_SESSIONS: 1
+      SE_NODE_OVERRIDE_MAX_SESSIONS: true
+      VNC_NO_PASSWORD: 0
+      VNC_PASSWORD: ${CUSTOMER3_VNC_PASSWORD}
+      SE_EVENT_BUS_HOST: selenium-hub
+      SE_EVENT_BUS_PUBLISH_PORT: 4442
+      SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
+      SE_NODE_STEREOTYPE: '{"browserName": "chrome", "browserVersion": "125.0", "platformName": "Linux", "goog:chromeOptions": {"binary": "/usr/bin/google-chrome"}, "nodename:applicationName": "chrome_customer3"}'
+    ports:
+      - "5903:5900"
+      - "7903:7900"
+    depends_on:
+      - selenium-hub
